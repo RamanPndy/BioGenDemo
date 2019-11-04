@@ -12,13 +12,13 @@ hospitals = [
       {"text":"Status","type":"string"}
     ],
     "rows":[
-      ["<a href='http://localhost:3000/d/SVYoZG0Zk/biogen-dashboard-2?orgId=1&hname=nyu'>New York University</a>","5","No Connection"],
-      ["<a href='http://localhost:3000/d/SVYoZG0Zk/biogen-dashboard-2?orgId=1&hname=uhgm'>The University Hospital of Giessen and Marburg</a>","2","No Connection"],
-      ["<a href='http://localhost:3000/d/SVYoZG0Zk/biogen-dashboard-2?orgId=1&hname=ccf'>Cleveland Clinic Foundation</a>","9","Error"],
-      ["<a href='http://localhost:3000/d/SVYoZG0Zk/biogen-dashboard-2?orgId=1&hname=jhu'>Johns Hopkins University</a>","3","Error"],
-      ["<a href='http://localhost:3000/d/SVYoZG0Zk/biogen-dashboard-2?orgId=1&hname=oh'>OhioHealth</a>","8","Shut Down"],
-      ["<a href='http://localhost:3000/d/SVYoZG0Zk/biogen-dashboard-2?orgId=1&hname=ur'>University of Rochester</a>","4","OK"],
-      ["<a href='http://localhost:3000/d/SVYoZG0Zk/biogen-dashboard-2?orgId=1&hname=wu'>Washington University</a>","3","OK"]
+      ["<a href='http://localhost:3000/d/SVYoZG0Zk/biogen-dashboard-2?orgId=1&var-hname=nyu'>New York University</a>","5","No Connection"],
+      ["<a href='http://localhost:3000/d/SVYoZG0Zk/biogen-dashboard-2?orgId=1&var-hname=uhgm'>The University Hospital of Giessen and Marburg</a>","2","No Connection"],
+      ["<a href='http://localhost:3000/d/SVYoZG0Zk/biogen-dashboard-2?orgId=1&var-hname=ccf'>Cleveland Clinic Foundation</a>","9","Error"],
+      ["<a href='http://localhost:3000/d/SVYoZG0Zk/biogen-dashboard-2?orgId=1&var-hname=jhu'>Johns Hopkins University</a>","3","Error"],
+      ["<a href='http://localhost:3000/d/SVYoZG0Zk/biogen-dashboard-2?orgId=1&var-hname=oh'>OhioHealth</a>","8","Shut Down"],
+      ["<a href='http://localhost:3000/d/SVYoZG0Zk/biogen-dashboard-2?orgId=1&var-hname=ur'>University of Rochester</a>","4","OK"],
+      ["<a href='http://localhost:3000/d/SVYoZG0Zk/biogen-dashboard-2?orgId=1&var-hname=wu'>Washington University</a>","3","OK"]
     ],  
     "type":"table"
   }
@@ -77,7 +77,7 @@ def hello_world():
 
 @app.route('/search', methods=["POST"]) 
 def search_data(): 
-    return Response(json.dumps(hospitals[0]["columns"]),  mimetype='application/json')
+    return Response(json.dumps(hospitalDict.keys()),  mimetype='application/json')
 
 @app.route('/query', methods=["POST"]) 
 def query_data(): 
@@ -91,6 +91,10 @@ def get_hospital_name():
       'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type'
     })
+
+@app.route('/hospitalkeys', methods=["GET"]) 
+def get_hospital_keys(): 
+    return Response(json.dumps(hospitalDict.keys()),  mimetype='application/json')
   
 if __name__ == '__main__':
     app.run()  
