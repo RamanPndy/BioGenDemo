@@ -1,4 +1,66 @@
 {
+  "__inputs": [
+    {
+      "name": "DS_PROMETHEUS",
+      "label": "Prometheus",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    },
+    {
+      "name": "DS_JSON",
+      "label": "JSON",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "simpod-json-datasource",
+      "pluginName": "JSON"
+    }
+  ],
+  "__requires": [
+    {
+      "type": "panel",
+      "id": "corpglory-multibar-graph-panel",
+      "name": "Multibar Graph Panel",
+      "version": "0.2.5"
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "6.4.3"
+    },
+    {
+      "type": "panel",
+      "id": "graph",
+      "name": "Graph",
+      "version": ""
+    },
+    {
+      "type": "datasource",
+      "id": "prometheus",
+      "name": "Prometheus",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "ryantxu-ajax-panel",
+      "name": "AJAX",
+      "version": "0.0.7-dev"
+    },
+    {
+      "type": "datasource",
+      "id": "simpod-json-datasource",
+      "name": "JSON",
+      "version": "0.1.4"
+    },
+    {
+      "type": "panel",
+      "id": "singlestat",
+      "name": "Singlestat",
+      "version": ""
+    }
+  ],
   "annotations": {
     "list": [
       {
@@ -15,12 +77,12 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 3,
-  "iteration": 1572847267045,
+  "id": null,
+  "iteration": 1574338956517,
   "links": [],
   "panels": [
     {
-      "datasource": null,
+      "datasource": "${DS_PROMETHEUS}",
       "gridPos": {
         "h": 2,
         "w": 13,
@@ -30,7 +92,7 @@
       "header_js": "{}",
       "id": 16,
       "method": "GET",
-      "mode": "text",
+      "mode": "html",
       "options": {},
       "params_js": "",
       "request": "http",
@@ -46,37 +108,20 @@
       "timeShift": null,
       "title": "Hospital Name",
       "type": "ryantxu-ajax-panel",
-      "url": "http://localhost:5000/hospitalName?hospitalName=${hname}",
+      "url": "http://localhost:5005/hospitalName?hospitalName=${hname}",
       "withCredentials": false
     },
     {
-      "content": "# Hospital is Connected\n\n\n\n",
-      "datasource": null,
-      "gridPos": {
-        "h": 2,
-        "w": 7,
-        "x": 0,
-        "y": 2
-      },
-      "id": 2,
-      "mode": "markdown",
-      "options": {},
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "",
-      "type": "text"
-    },
-    {
       "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": true,
+      "colorBackground": true,
+      "colorValue": false,
       "colors": [
         "#d44a3a",
         "rgba(237, 129, 40, 0.89)",
         "#299c46"
       ],
-      "datasource": "Prometheus",
-      "description": "",
+      "datasource": "${DS_PROMETHEUS}",
+      "decimals": 1,
       "format": "none",
       "gauge": {
         "maxValue": 100,
@@ -86,20 +131,14 @@
         "thresholdMarkers": true
       },
       "gridPos": {
-        "h": 2,
+        "h": 3,
         "w": 7,
-        "x": 8,
+        "x": 2,
         "y": 2
       },
-      "id": 4,
+      "id": 2,
       "interval": null,
-      "links": [
-        {
-          "targetBlank": true,
-          "title": "LINK",
-          "url": "https://www.google.com/"
-        }
-      ],
+      "links": [],
       "mappingType": 1,
       "mappingTypes": [
         {
@@ -137,14 +176,102 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "svc_requests_failed_total",
+          "expr": "svc_hospital_connected{hospital_name=\"$hname\"}",
           "refId": "A"
         }
       ],
-      "thresholds": "3",
+      "thresholds": "0.1,1",
       "timeFrom": null,
       "timeShift": null,
-      "title": "Error Queue",
+      "title": "",
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "Hospital Disconnected",
+          "value": "0"
+        },
+        {
+          "op": "=",
+          "text": "Hospital Connected",
+          "value": "1"
+        }
+      ],
+      "valueName": "current"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": false,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "datasource": "${DS_PROMETHEUS}",
+      "format": "dateTimeAsIso",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 8,
+        "x": 14,
+        "y": 2
+      },
+      "id": 3,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "options": {},
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": false,
+        "ymax": null,
+        "ymin": null
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "svc_timestamp_test",
+          "refId": "A"
+        }
+      ],
+      "thresholds": "",
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Last Message Recieved",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -154,65 +281,21 @@
           "value": "null"
         }
       ],
-      "valueName": "avg"
-    },
-    {
-      "bgColor": null,
-      "clockType": "24 hour",
-      "countdownSettings": {
-        "customFormat": null,
-        "endCountdownTime": "2019-10-31T07:45:00.000Z",
-        "endText": "00:00:00"
-      },
-      "datasource": null,
-      "dateSettings": {
-        "dateFormat": "DD-MM-YYYY",
-        "fontSize": "20px",
-        "fontWeight": "normal",
-        "showDate": true
-      },
-      "gridPos": {
-        "h": 2,
-        "w": 8,
-        "x": 16,
-        "y": 2
-      },
-      "id": 3,
-      "mode": "time",
-      "options": {},
-      "refreshSettings": {
-        "syncWithDashboard": false
-      },
-      "timeFrom": null,
-      "timeSettings": {
-        "customFormat": "HH:mm:ss",
-        "fontSize": "60px",
-        "fontWeight": "normal"
-      },
-      "timeShift": null,
-      "timezone": null,
-      "timezoneSettings": {
-        "fontSize": "12px",
-        "fontWeight": "normal",
-        "showTimezone": false,
-        "zoneFormat": "offsetAbbv"
-      },
-      "title": "Last Message Recieved",
-      "type": "grafana-clock-panel"
+      "valueName": "last_time"
     },
     {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "${DS_PROMETHEUS}",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 4
+        "y": 5
       },
       "id": 14,
       "legend": {
@@ -294,14 +377,14 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "${DS_PROMETHEUS}",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 4
+        "y": 5
       },
       "id": 8,
       "legend": {
@@ -379,14 +462,14 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 12
+        "y": 13
       },
       "id": 10,
       "legend": {
@@ -461,17 +544,99 @@
     },
     {
       "aliasColors": {},
+      "bars": true,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_PROMETHEUS}",
+      "displayBarsSideBySide": true,
+      "fill": 1,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 13
+      },
+      "id": 18,
+      "labelAlign": "center",
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": false,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {},
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "svc_hospital_message_types{hospital_name=\"$hname\", mode=\"$mesgmode\"}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Message Types",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "corpglory-multibar-graph-panel",
+      "xaxis": {
+        "buckets": null,
+        "customDateFormat": "",
+        "customDateFormatShow": false,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ]
+    },
+    {
+      "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Prometheus",
+      "datasource": "${DS_PROMETHEUS}",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 12
+        "y": 21
       },
       "id": 12,
       "legend": {
@@ -552,11 +717,8 @@
     "list": [
       {
         "allValue": null,
-        "current": {
-          "text": "ur",
-          "value": "ur"
-        },
-        "datasource": "JSON",
+        "current": {},
+        "datasource": "${DS_JSON}",
         "definition": " http://localhost:5000/hospitalkeys",
         "hide": 0,
         "includeAll": false,
@@ -574,6 +736,54 @@
         "tagsQuery": "",
         "type": "query",
         "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "hl7",
+          "value": "hl7"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "mesgmode",
+        "options": [
+          {
+            "selected": false,
+            "text": "all",
+            "value": "all"
+          },
+          {
+            "selected": false,
+            "text": "biobanking",
+            "value": "biobanking"
+          },
+          {
+            "selected": false,
+            "text": "dicom",
+            "value": "dicom"
+          },
+          {
+            "selected": false,
+            "text": "mspt",
+            "value": "mspt"
+          },
+          {
+            "selected": false,
+            "text": "emr",
+            "value": "emr"
+          },
+          {
+            "selected": true,
+            "text": "hl7",
+            "value": "hl7"
+          }
+        ],
+        "query": "all,biobanking,dicom,mspt,emr,hl7",
+        "skipUrlSync": false,
+        "type": "custom"
       }
     ]
   },
@@ -598,5 +808,5 @@
   "timezone": "",
   "title": "Biogen Dashboard 2",
   "uid": "SVYoZG0Zk",
-  "version": 46
+  "version": 73
 }

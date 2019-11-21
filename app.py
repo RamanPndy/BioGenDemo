@@ -72,7 +72,67 @@ def hello_world():
   "insights": {
     "alerts": random.randint(1,7),
     "errors": random.randint(1,10)
-  }
+  },
+  "hospital_connected" : [
+    {"key":'nyu', "value": random.choice([0, 1])},
+    {"key":'uhgm', "value": random.choice([0, 1])},
+    {"key":'ccf', "value": random.choice([0, 1])},
+    {"key":'jhu', "value": random.choice([0, 1])},
+    {"key":'oh', "value": random.choice([0, 1])},
+    {"key":'ur', "value": random.choice([0, 1])},
+    {"key":'wu', "value": random.choice([0, 1])}
+  ],
+  "hospital_message_types" : [
+    {'nyu': {
+      "mspt": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)},
+      "emr": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)},
+      "dicom": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)},
+      "biobanking": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)},
+      "hl7": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)}
+      }},
+    {'uhgm': {
+      "mspt": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)},
+      "emr": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)},
+      "dicom": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)},
+      "biobanking": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)},
+      "hl7": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)}
+      }},
+    {'ccf': {
+      "mspt": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)},
+      "emr": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)},
+      "dicom": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)},
+      "biobanking": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)},
+      "hl7": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)}
+      }},
+    {'jhu': {
+      "mspt": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)},
+      "emr": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)},
+      "dicom": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)},
+      "biobanking": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)},
+      "hl7": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)}
+      }},
+    {'oh' : {
+      "mspt": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)},
+      "emr": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)},
+      "dicom": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)},
+      "biobanking": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)},
+      "hl7": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)}
+      }},
+    {'ur' : {
+      "mspt": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)},
+      "emr": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)},
+      "dicom": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)},
+      "biobanking": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)},
+      "hl7": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)}
+      }},
+    {'wu' : {
+      "mspt": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)},
+      "emr": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)},
+      "dicom": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)},
+      "biobanking": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)},
+      "hl7": {"errors": random.randint(1,7), "messages": random.randint(1,7), "nonconsented": random.randint(1,7)}
+      }}
+  ]
 })
 
 @app.route('/search', methods=["POST"]) 
@@ -86,7 +146,8 @@ def query_data():
 @app.route('/hospitalName', methods=["GET"]) 
 def get_hospital_name(): 
     hname = request.args.get('hospitalName')
-    return Response(hospitalDict[hname], status=200,  mimetype='text/plain', headers = {
+    hospital_name_html = "<center><h2>{}</h2></center>".format(hospitalDict[hname])
+    return Response(hospital_name_html, status=200,  mimetype='text/plain', headers = {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type'
@@ -97,4 +158,4 @@ def get_hospital_keys():
     return Response(json.dumps(hospitalDict.keys()),  mimetype='application/json')
   
 if __name__ == '__main__':
-    app.run()  
+    app.run(host='127.0.0.1', port=5005, debug=True)  

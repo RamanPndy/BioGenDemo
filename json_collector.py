@@ -1,13 +1,16 @@
-from prometheus_client import start_http_server, Metric, REGISTRY
+from prometheus_client import start_http_server, Metric, Gauge,CollectorRegistry,pushadd_to_gateway
+from prometheus_client.core import GaugeMetricFamily, REGISTRY
 import json
 import requests
 import sys
 import time
 import os
+import arrow
+from datetime import datetime, timedelta
 
 class JsonCollector(object):
   def __init__(self):
-    self._endpoint = "http://localhost:5000/"
+    self._endpoint = "http://localhost:5005/"
   def collect(self):
     # Fetch the JSON
     os.environ['NO_PROXY'] = 'localhost,127.0.0.1' 
@@ -81,10 +84,34 @@ class JsonCollector(object):
       metric.add_sample('svc_insights', value=v, labels={'repository': k})
     yield metric
 
+    metric = Metric('svc_hospital_connected', 'Hospital Connection Status', 'gauge')
+    for hospital in response['hospital_connected']:
+      for hkey, hvalue in hospital.iteritems():
+        hospital_label = hospital.get('key')
+        hospital_value = hospital.get('value')
+        metric.add_sample('svc_hospital_connected', value=hospital_value, labels={'hospital_name': hospital_label})
+    yield metric
+
+    metric = Metric('svc_hospital_message_types', 'Hospital Message Types', 'summary')
+    for mesg_type in response['hospital_message_types']:
+      for hkey, hval in mesg_type.iteritems():
+        for mkey, mval in hval.iteritems():
+          metric.add_sample('svc_hospital_message_types', value=mval.get('errors'), labels={'mesg_type':'errors', 'mode':mkey, 'hospital_name':hkey})
+          metric.add_sample('svc_hospital_message_types', value=mval.get('messages'), labels={'mesg_type':'messages', 'mode':mkey, 'hospital_name':hkey})
+          metric.add_sample('svc_hospital_message_types', value=mval.get('nonconsented'), labels={'mesg_type':'nonconsented', 'mode':mkey, 'hospital_name':hkey})
+    yield metric
+
+    timestamp = arrow.utcnow().timestamp
+
+    metric = Metric('svc_timestamp_test', 'Time stamp data', 'gauge')
+    metric.add_sample('svc_timestamp_test', value=timestamp, labels={})
+    yield metric
 
 if __name__ == '__main__':
   # Usage: json_exporter.py port endpoint
-  start_http_server(int(sys.argv[1]))
+  start_http_server(int('1234'))
   REGISTRY.register(JsonCollector())
+  print "started"
 
-  while True: time.sleep(1)
+  while True:
+    time.sleep(1)
